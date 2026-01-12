@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "../ui/button";
+import Logo from "./Logo";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,17 +15,9 @@ const Header = () => {
     <header className="sticky top-0 z-10 border-b border-white/5 bg-[#0f1116]/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/25">
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              className="h-5 w-5 text-white"
-              fill="currentColor"
-            >
-              <path d="M4.5 9h1.75V7.25a1.25 1.25 0 1 1 2.5 0V9h6.5V7.25a1.25 1.25 0 1 1 2.5 0V9h1.75a1.25 1.25 0 1 1 0 2.5H18.25v1.5h1.75a1.25 1.25 0 1 1 0 2.5H18.25v1.75a1.25 1.25 0 1 1-2.5 0V15h-6.5v1.75a1.25 1.25 0 1 1-2.5 0V15H4.5a1.25 1.25 0 1 1 0-2.5h1.75v-1.5H4.5A1.25 1.25 0 1 1 4.5 9Zm5.25 2.5v1.5h4.5v-1.5h-4.5Z" />
-            </svg>
-          </div>
-          <span className="text-lg font-semibold text-white">GymCheck</span>
+          <Link to="/">
+            <Logo />
+          </Link>
         </div>
 
         <nav className="hidden md:flex">
@@ -42,12 +36,16 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Button className="cursor-pointer hidden text-sm font-semibold text-white transition-colors hover:text-emerald-300 sm:block">
-            Entrar
-          </Button>
-          <Button className="cursor-pointer rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:brightness-110 hover:shadow-emerald-500/35">
-            Registre-se
-          </Button>
+          <Link to="/login">
+            <Button className="cursor-pointer hidden text-sm font-semibold text-white transition-colors hover:text-emerald-300 sm:block">
+              Entrar
+            </Button>
+          </Link>
+          <Link to="/cadastro">
+            <Button className="cursor-pointer rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:brightness-110 hover:shadow-emerald-500/35">
+              Registre-se
+            </Button>
+          </Link>
           <Button
             type="button"
             aria-expanded={isOpen}
@@ -75,12 +73,20 @@ const Header = () => {
               </li>
             ))}
             <li className="flex items-center gap-3 px-3 pt-2">
-              <button className="text-sm font-semibold text-emerald-400 transition-colors hover:text-emerald-300">
-                Entrar
-              </button>
-              <button className="flex-1 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:brightness-110">
-                Registre-se
-              </button>
+              <Link to="/login" onClick={() => setIsOpen(false)}>
+                <button className="text-sm font-semibold text-emerald-400 transition-colors hover:text-emerald-300">
+                  Entrar
+                </button>
+              </Link>
+              <Link
+                to="/cadastro"
+                onClick={() => setIsOpen(false)}
+                className="flex-1"
+              >
+                <button className="w-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition hover:brightness-110">
+                  Registre-se
+                </button>
+              </Link>
             </li>
           </ul>
         </div>

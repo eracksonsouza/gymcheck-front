@@ -1,20 +1,20 @@
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 
+// Import the generated route tree
+import { routeTree } from "./routeTree.gen";
 
-import Header from "./components/layout/Header";
-import SideBar from "./components/layout/SideBar";
-import BenefitsPage from "./pages/Benefits/Index";
-import HeroPage from "./pages/Hero/Index";
+// Create a new router instance
+const router = createRouter({ routeTree });
 
-function App() {
-  return (
-    <SideBar>
-      <div className="min-h-screen bg-[#0f1116] text-white">
-        <Header />
-        <HeroPage />
-        <BenefitsPage />
-      </div>
-    </SideBar>
-  );
+// Register the router instance for type safety
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
 }
 
-export default App
+function App() {
+  return <RouterProvider router={router} />;
+}
+
+export default App;

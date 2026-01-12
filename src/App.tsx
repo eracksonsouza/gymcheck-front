@@ -1,13 +1,20 @@
 
 
-function App() {
+import Header from "./components/layout/Header";
+import SideBar from "./components/layout/SideBar";
+import BenefitsPage from "./pages/Benefits/Index";
+import HeroPage from "./pages/Hero/Index";
 
+function App() {
   return (
-    <>
-      <h1 className="bg-red-500 text-blue-600">Olá</h1>
-      <p className="underline">testando</p>
-    </>
-  )
+    <SideBar>
+      <div className="min-h-screen bg-[#0f1116] text-white">
+        <Header />
+        <HeroPage />
+        <BenefitsPage />
+      </div>
+    </SideBar>
+  );
 }
 
 export default App

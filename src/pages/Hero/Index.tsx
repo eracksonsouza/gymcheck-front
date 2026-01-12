@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
+﻿import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { useSidebar } from "@/components/ui/sidebar";
+import { Link } from "@tanstack/react-router";
 
 const heroBg = new URL("../../assets/gyms-hero-page.jpg", import.meta.url).href;
 
 const HeroPage = () => {
-  const { isMobile, setOpen, setOpenMobile } = useSidebar();
   const phrases = [
     "quiser.",
     "Faça check-in na palma da sua mão.",
@@ -82,16 +81,17 @@ const HeroPage = () => {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button
-              className="group inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#f97316] to-[#ea580c] px-6 py-3 text-base font-semibold text-white shadow-[0_15px_40px_-12px_rgba(249,115,22,0.55)] transition hover:scale-[1.01] hover:shadow-[0_18px_45px_-10px_rgba(249,115,22,0.6)]"
-              onClick={() => (isMobile ? setOpenMobile(true) : setOpen(true))}
-            >
-              Começar agora
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button className="inline-flex items-center justify-center rounded-xl border border-[#f97316] px-6 py-3 text-base font-semibold text-[#f97316] transition hover:border-[#fb923c] hover:text-[#fb923c] hover:shadow-[0_10px_30px_-18px_rgba(249,115,22,0.65)]">
-              Fazer login
-            </Button>
+            <Link to="/cadastro">
+              <Button className="group inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#f97316] to-[#ea580c] px-6 py-3 text-base font-semibold text-white shadow-[0_15px_40px_-12px_rgba(249,115,22,0.55)] transition hover:scale-[1.01] hover:shadow-[0_18px_45px_-10px_rgba(249,115,22,0.6)]">
+                Começar agora
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button className="inline-flex items-center justify-center rounded-xl border border-[#f97316] px-6 py-3 text-base font-semibold text-[#f97316] transition hover:border-[#fb923c] hover:text-[#fb923c] hover:shadow-[0_10px_30px_-18px_rgba(249,115,22,0.65)]">
+                Fazer login
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

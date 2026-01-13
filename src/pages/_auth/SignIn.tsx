@@ -16,7 +16,7 @@ const LoginPage = () => {
       setError(null);
       await signIn(data);
       // Redirecionar para o dashboard após login bem-sucedido
-      navigate({ to: "/" });
+      navigate({ to: "/dashboard" });
     } catch (error: any) {
       console.error("Erro ao fazer login:", error);
       const message =

@@ -3,9 +3,12 @@ import { Menu, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "../ui/button";
 import Logo from "./Logo";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
+
   const navItems = [
     { label: "Benefícios", href: "#beneficios" },
     { label: "Como funciona", href: "#como-funciona" },
@@ -36,16 +39,39 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link to="/login">
-            <Button className="cursor-pointer hidden text-sm font-semibold text-white transition-colors hover:text-emerald-300 sm:block">
-              Entrar
-            </Button>
-          </Link>
-          <Link to="/cadastro">
-            <Button className="cursor-pointer rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:brightness-110 hover:shadow-emerald-500/35">
-              Registre-se
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link to="/dashboard">
+                <Button className="cursor-pointer hidden text-sm font-semibold text-white transition-colors hover:text-emerald-300 sm:block">
+                  Dashboard
+                </Button>
+              </Link>
+              <div className="hidden sm:flex items-center gap-3">
+                <span className="text-sm text-slate-400">
+                  Olá, {user?.name?.split(" ")[0]}
+                </span>
+                <Button
+                  onClick={logout}
+                  className="cursor-pointer rounded-full bg-slate-700 hover:bg-slate-600 px-4 py-2 text-sm font-semibold text-white transition"
+                >
+                  Sair
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button className="cursor-pointer hidden text-sm font-semibold text-white transition-colors hover:text-emerald-300 sm:block">
+                  Entrar
+                </Button>
+              </Link>
+              <Link to="/cadastro">
+                <Button className="cursor-pointer rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:brightness-110 hover:shadow-emerald-500/35">
+                  Registre-se
+                </Button>
+              </Link>
+            </>
+          )}
           <Button
             type="button"
             aria-expanded={isOpen}

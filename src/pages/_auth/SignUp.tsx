@@ -18,7 +18,7 @@ const SignUpPage = () => {
       const { confirmPassword, ...signUpData } = data;
       await signUp(signUpData);
       // Redirecionar para o dashboard após registro bem-sucedido
-      navigate({ to: "/" });
+      navigate({ to: "/dashboard" });
     } catch (error: any) {
       console.error("Erro ao criar conta:", error);
       const message =

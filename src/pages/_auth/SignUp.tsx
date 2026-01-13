@@ -1,17 +1,30 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import RegisterForm from "@/components/RegisterForm";
 import Logo from "@/components/layout/Logo";
 import type { SignUpFormData } from "@/lib/validations/auth";
 import loginImage from "@/assets/login-image.jpg";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 const SignUpPage = () => {
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async (data: SignUpFormData) => {
     try {
-      console.log("Dados do formulário:", data);
-      // Aqui você vai adicionar a lógica de registro
-      // Por exemplo: await signUp(data);
-    } catch (error) {
+      setError(null);
+      // O backend pode não precisar do confirmPassword, então enviamos apenas os dados necessários
+      const { confirmPassword, ...signUpData } = data;
+      await signUp(signUpData);
+      // Redirecionar para o dashboard após registro bem-sucedido
+      navigate({ to: "/" });
+    } catch (error: any) {
       console.error("Erro ao criar conta:", error);
+      const message =
+        error.response?.data?.message ||
+        "Erro ao criar conta. Tente novamente.";
+      setError(message);
     }
   };
 
@@ -50,6 +63,12 @@ const SignUpPage = () => {
             <div>
               <h2 className="text-3xl font-bold text-white">Crie sua conta</h2>
             </div>
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
 
             <RegisterForm onSubmit={handleSubmit} />
 

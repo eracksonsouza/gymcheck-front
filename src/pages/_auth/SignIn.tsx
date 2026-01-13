@@ -1,17 +1,28 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import LoginForm from "@/components/LoginForm";
 import Logo from "@/components/layout/Logo";
 import type { SignInFormData } from "@/lib/validations/auth";
 import loginImage from "@/assets/login-image.jpg";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 const LoginPage = () => {
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async (data: SignInFormData) => {
     try {
-      console.log("Dados do formulário:", data);
-      // Aqui você vai adicionar a lógica de autenticação
-      // Por exemplo: await signIn(data);
-    } catch (error) {
+      setError(null);
+      await signIn(data);
+      // Redirecionar para o dashboard após login bem-sucedido
+      navigate({ to: "/" });
+    } catch (error: any) {
       console.error("Erro ao fazer login:", error);
+      const message =
+        error.response?.data?.message ||
+        "Erro ao fazer login. Verifique suas credenciais.";
+      setError(message);
     }
   };
 
@@ -52,6 +63,12 @@ const LoginPage = () => {
                 Acesse sua conta
               </h2>
             </div>
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
 
             <LoginForm onSubmit={handleSubmit} />
 

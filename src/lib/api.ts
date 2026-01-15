@@ -47,7 +47,7 @@ export interface SignUpRequest {
 
 export interface AuthResponse {
   token: string;
-  user: {
+  user?: {
     id: string;
     name: string;
     email: string;
@@ -122,8 +122,11 @@ export const gymsApi = {
   },
 
   // Buscar academias por nome
-  search: async (query: string): Promise<{ gyms: Gym[] }> => {
-    const response = await api.get("/gyms/search", { params: { q: query } });
+  search: async (query: string, page = 1): Promise<{ gyms: Gym[] }> => {
+    const response = await api.get("/gyms/search", {
+      // backend espera "query" e "page"
+      params: { query: query.trim(), page },
+    });
     return response.data;
   },
 

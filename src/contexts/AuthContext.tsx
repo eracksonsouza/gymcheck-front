@@ -35,28 +35,49 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Ao iniciar, verificar se existe token salvo
+  const saveUser = (userData: User) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  const fetchProfile = async () => {
+    const profile = await authApi.getProfile();
+    const profileData = (profile as { user?: User }).user || profile;
+    saveUser(profileData);
+    return profileData;
+  };
+
+  // Ao iniciar, verificar se existe token salvo e buscar perfil
   useEffect(() => {
-    const loadUserFromStorage = () => {
+    const loadUserFromStorage = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token");
         const savedUser = localStorage.getItem("user");
 
-        if (token && savedUser) {
+        if (savedUser) {
           const userData = JSON.parse(savedUser);
-          setUser(userData);
-          setIsAuthenticated(true);
+          saveUser(userData);
         }
+
+        await fetchProfile();
       } catch (error) {
-        console.error("Erro ao carregar usuário do storage:", error);
+        console.error("Erro ao carregar usuário do storage ou perfil:", error);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadUserFromStorage();
+    void loadUserFromStorage();
   }, []);
 
   const signIn = async (data: SignInRequest) => {
@@ -65,10 +86,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Salvar token e dados do usuário
       localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
 
-      setUser(response.user);
-      setIsAuthenticated(true);
+      if (response.user) {
+        saveUser(response.user);
+      } else {
+        await fetchProfile();
+      }
     } catch (error) {
       console.error("Erro no login:", error);
       throw error;
@@ -81,10 +104,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Salvar token e dados do usuário
       localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
 
-      setUser(response.user);
-      setIsAuthenticated(true);
+      if (response.user) {
+        saveUser(response.user);
+      } else {
+        await fetchProfile();
+      }
     } catch (error) {
       console.error("Erro no registro:", error);
       throw error;

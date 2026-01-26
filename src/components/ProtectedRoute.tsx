@@ -1,6 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { Navigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -29,6 +30,13 @@ export const ProtectedRoute = ({
   requireAdmin = false,
 }: ProtectedRouteProps) => {
   const { isAuthenticated, user, isLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      navigate({ to: "/login" });
+    }
+  }, [isLoading, isAuthenticated, navigate]);
 
   // Enquanto carrega o estado de autenticação
   if (isLoading) {
@@ -39,9 +47,13 @@ export const ProtectedRoute = ({
     );
   }
 
-  // Se não está autenticado, redireciona para login
+  // Se não está autenticado, mostra loading enquanto redireciona
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return (
+      <div className="min-h-screen bg-[#0d0f15] flex items-center justify-center">
+        <div className="text-white text-lg">Redirecionando...</div>
+      </div>
+    );
   }
 
   // Se requer admin mas o usuário não é admin

@@ -30,7 +30,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Início", icon: Home, href: "/dashboard" },
-  { label: "Próximas", icon: MapPin, href: "/proximas" },
+  { label: "Nearby", icon: MapPin, href: "/nearby" },
   { label: "Buscar", icon: Search, href: "/buscar" },
   { label: "Histórico", icon: History, href: "/historico" },
   { label: "Perfil", icon: UserRound, href: "/perfil" },
@@ -60,14 +60,14 @@ const SideBar = ({ children, activeItem = "Início" }: SideBarProps) => {
         <aside
           className={cn(
             "hidden md:flex flex-col h-screen sticky top-0 bg-zinc-900 border-r border-white/5 transition-all duration-300",
-            isCollapsed ? "w-16" : "w-64"
+            isCollapsed ? "w-16" : "w-64",
           )}
         >
           <div className="flex items-center justify-between h-16 px-3 shrink-0">
             <div
               className={cn(
                 "flex items-center gap-3",
-                isCollapsed && "justify-center w-full"
+                isCollapsed && "justify-center w-full",
               )}
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/20">
@@ -113,7 +113,7 @@ const SideBar = ({ children, activeItem = "Início" }: SideBarProps) => {
                       isActive
                         ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25"
                         : "text-slate-400 hover:bg-white/5 hover:text-white",
-                      isCollapsed && "justify-center px-2"
+                      isCollapsed && "justify-center px-2",
                     )}
                   >
                     <item.icon className="h-5 w-5 shrink-0" />
@@ -144,13 +144,13 @@ const SideBar = ({ children, activeItem = "Início" }: SideBarProps) => {
             <div
               className={cn(
                 "rounded-xl bg-zinc-800/50 p-3",
-                isCollapsed && "p-2"
+                isCollapsed && "p-2",
               )}
             >
               <div
                 className={cn(
                   "flex items-center gap-3",
-                  isCollapsed && "flex-col gap-2"
+                  isCollapsed && "flex-col gap-2",
                 )}
               >
                 <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-emerald-400/20 to-emerald-600/20 ring-2 ring-emerald-500/20">
@@ -211,7 +211,7 @@ const SideBar = ({ children, activeItem = "Início" }: SideBarProps) => {
         <aside
           className={cn(
             "fixed inset-y-0 left-0 z-50 w-72 flex flex-col bg-zinc-900 border-r border-white/5 transition-transform duration-300 md:hidden",
-            isMobileOpen ? "translate-x-0" : "-translate-x-full"
+            isMobileOpen ? "translate-x-0" : "-translate-x-full",
           )}
         >
           <div className="flex items-center justify-between h-16 px-4 shrink-0">
@@ -243,7 +243,7 @@ const SideBar = ({ children, activeItem = "Início" }: SideBarProps) => {
                         "flex items-center gap-3 rounded-xl px-3 py-3 font-medium transition-all",
                         isActive
                           ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25"
-                          : "text-slate-400 hover:bg-white/5 hover:text-white"
+                          : "text-slate-400 hover:bg-white/5 hover:text-white",
                       )}
                     >
                       <item.icon className="h-5 w-5" />

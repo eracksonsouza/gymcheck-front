@@ -2,7 +2,6 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3333",
-  headers: { "Content-Type": "application/json" },
 });
 
 // Interceptor para adicionar o token em todas as requisições
@@ -16,7 +15,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Interceptor para tratar respostas e erros
@@ -30,7 +29,7 @@ api.interceptors.response.use(
       window.location.href = "/login";
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 // Tipos
@@ -55,6 +54,24 @@ export interface AuthResponse {
   };
 }
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  avatarUrl?: string | null;
+  location?: string | null;
+  role?: string;
+  created_at?: string;
+}
+
+export interface UpdateProfileRequest {
+  name?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+}
+
 export interface Gym {
   id: string;
   title: string;
@@ -63,6 +80,12 @@ export interface Gym {
   latitude: number;
   longitude: number;
   distance?: number;
+  // Campos extras usados na busca de academias próximas
+  name?: string;
+  address?: string;
+  rating?: number;
+  status?: string;
+  openHours?: string;
 }
 
 export interface CheckIn {
@@ -87,6 +110,7 @@ export interface CheckInHistoryResponse {
 export interface NearbyGymsParams {
   latitude: number;
   longitude: number;
+  page?: number;
 }
 
 // Funções de autenticação
@@ -101,8 +125,33 @@ export const authApi = {
     return response.data;
   },
 
-  getProfile: async () => {
+  getProfile: async (): Promise<UserProfile> => {
     const response = await api.get("/me");
+    return response.data;
+  },
+
+  updateProfile: async (
+    data: UpdateProfileRequest,
+  ): Promise<{ user: UserProfile }> => {
+    const response = await api.put("/me", data);
+    return response.data;
+  },
+
+  uploadAvatar: async (file: File): Promise<{ avatarUrl: string }> => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    console.log("Enviando FormData:", {
+      fileName: file.name,
+      fileType: file.type,
+      fileSize: file.size,
+    });
+
+    const response = await api.post("/me/avatar", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   },
 };

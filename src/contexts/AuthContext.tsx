@@ -26,6 +26,9 @@ interface User {
   name: string;
   email: string;
   role?: string;
+  phone?: string | null;
+  avatarUrl?: string | null;
+  location?: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
